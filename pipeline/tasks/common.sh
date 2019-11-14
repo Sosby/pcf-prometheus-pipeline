@@ -46,7 +46,7 @@ function login_to_bosh_uaa() {
 	uaa_admin_password=$($CURL --path=/api/v0/deployed/director/credentials/uaa_admin_user_credentials | jq -r .credential.value.password)
 
 	echo "Logging into BOSH UAA..."
-	uaac target https://$director_ip:8443 --skip-ssl-validation
+	uaac target https://hci-hdc-pcf1-bosh.int.8451.com:8443 --skip-ssl-validation
 	uaac token owner get login -s $uaa_login_password<<EOF
 admin
 $uaa_admin_password
