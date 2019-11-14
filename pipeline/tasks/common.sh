@@ -25,13 +25,14 @@ function login_to_cf_uaa() {
 	echo "Getting UAA credentials..."
 	cf_id=$($CURL --path=/api/v0/deployed/products | jq -r '.[] | select(.type == "cf") | .guid')
 	uaa_creds=$($CURL --path=/api/v0/deployed/products/$cf_id/credentials/.uaa.admin_client_credentials)
-
+        echo "Getting uaa_client"
 	uaa_client=$(echo $uaa_creds | jq -r .credential.value.identity)
 	uaa_secret=$(echo $uaa_creds | jq -r .credential.value.password)
 
 	system_domain=$($CURL --path=/api/v0/deployed/products/$cf_id/manifest | jq -r '.instance_groups[] | select (.name == "cloud_controller" or .name == "control") | .jobs[] | select (.name == "cloud_controller_ng") | .properties.system_domain')
-
+        echo "Setting uaac target"
 	uaac target https://uaa.${system_domain} --skip-ssl-validation
+	echo "Getting uaac token"
 	uaac token client get ${uaa_client} -s ${uaa_secret}
 }
 
