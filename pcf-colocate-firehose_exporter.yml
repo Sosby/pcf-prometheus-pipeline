@@ -25,6 +25,11 @@
         metrics:
           environment: "((metrics_environment))"
         skip_ssl_verify: ((skip_ssl_verify))
+        # Adding due to firehose_exporter error
+        # https://gitmemory.com/issue/bosh-prometheus/prometheus-boshrelease/318/509929151
+        logging:
+          url: wss://doppler.((system_domain)):((traffic_controller_external_port))
+          use_legacy_firehose: false
 
 # add local firehose_exporter as a target
 - type: replace
